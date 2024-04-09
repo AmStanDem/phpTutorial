@@ -4,9 +4,6 @@ require '../../config/connect.php';
 require '../../src/functions.php';
 require '../../includes/sessions.php';
 require_login($_SESSION['logged_in']);
-/* THE echo function.
-This function allows to print text html code,
-js code and other types of language in our page php.*/
 ?>
 <!doctype html>
 <html lang="en">
@@ -34,9 +31,17 @@ js code and other types of language in our page php.*/
         </div>
     </div>
 </nav>
+<?php
+/* THE echo function.
+This function allows to print text html code,
+js code and other types of language in our page php.
+*/
+?>
 <h2><?php echo ("Hello ".$_SESSION['email']);?></h2>
 <?php
 $res = /*getUsersMySQLI($connect)*/ getUsersPDO($db);
+/* The if statement: checks if a condition is true or false
+and do some action in base of the value of the condition.*/
 if (/*mysqli_num_rows($res) > 0*/$res)
 {
     echo ("<table class='table'>");
@@ -48,7 +53,36 @@ if (/*mysqli_num_rows($res) > 0*/$res)
                 </tr>
             </thead>");
     echo "<tbody>";
-    foreach (/*$row = $res->fetch_assoc()*/ $res as $record)
+    /*Cycles: A cycle is a group of instructions that is repeated as long as the condition of it is respected.*/
+    /*We have different types of cycles:*/
+    /*The for cycle: we use the for cycle when we know the number of cycles.*/
+    /*It is formed by 3 parts:
+    The initialization part of the counters,
+    the condition and
+    the increment or decrement of our counts.*/
+    /*for ($i = 0; $i < $n; $i++)
+    {
+
+    }
+    */
+    // The do while: We use the do while cycle when we want to do a set of instructions at least one time,
+    // and we don't know when the condition will be broken.
+    /*
+    do
+    {
+
+    }
+    while(condition);
+    */
+    /*While cycle: We use the while cycle when don't know when the condition will be broken. */
+    /*
+     while(condition)
+     {
+
+     } */
+    /*foreach cycle: we use the foreach cycle when we want to read all the elements directly
+    (without an index) of a collection. */
+    /*while*/foreach (/*$row = $res->fetch_assoc()*/ $res as $record)
     {
         ?>
             <tr>
@@ -60,6 +94,22 @@ if (/*mysqli_num_rows($res) > 0*/$res)
     echo "</tbody>";
     echo "</table>";
 }
+// The else statement: When the condition fails, we call the else statement and call the code of it.
+/*
+else
+{
+
+}
+*/
+// The elseif statement: When the condition fails, we call the elseif statement
+// for check another condition and if the value of it is true, we proceed with code inside it.
+/*
+
+elseif (condition)
+{
+
+}
+*/
 ?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>

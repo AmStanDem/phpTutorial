@@ -1,9 +1,23 @@
 <?php
-$hostname = 'localhost'; // The IP address of the db server.
-$port = 3306;
-$username = 'root'; // The username of the db server.
-$password = ''; // The password of the user in the db server.
-$database = 'tutorial-php'; // The name of the database to connect in the db server.
+use Dotenv\Dotenv;
+require_once __DIR__ . '/../vendor/autoload.php';
+
+/*DOTENV: A .env file is a file that contains sensitive data
+for configuration(API credentials,db credentials etc.)
+that we want to keep it secret.
+In this case i use the .ENV file for memorize the credentials for my mysql database.
+These credentials are relative to my machine, so they must be protected from other users.
+In general, we add the .env file in the gitignore, in order to block any changes of it and any sharing of it.*/
+/*If you want to use .env you can follow this tutorial: https://www.dotenv.org/docs/quickstart.
+The step you need to do*/
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$hostname = $_ENV['HOSTNAME']; // The IP address of the db server.
+$port = $_ENV['PORT'];
+$username = $_ENV['USERNAME']; // The username of the db server.
+$password = $_ENV['PASSWORD']; // The password of the user in the db server.
+$database = $_ENV['DATABASE']; // The name of the database to connect in the db server.
 /*
  * The socket parameter in the context of MySQLi
  * refers to the transport layer used for establishing connections to a MySQL server.
@@ -38,4 +52,3 @@ catch (PDOException $e)
 {
     die('DB connection error '.$e->getMessage());
 }
-

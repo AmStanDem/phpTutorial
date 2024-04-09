@@ -3,14 +3,14 @@
 /* Functions: A function is a piece of code that it can be called anywhere in a program.
 It can have some parameters and return something. */
 
-function insertUserMySQLI($email,$password,$connect): void
+function insertUserMySQLI(string $email,string $password,mysqli $connect): void
 {
     $stmt = $connect->prepare("INSERT INTO users (email,password) values(?,?)");
     $stmt->bind_param("ss",$email,$password);
     $stmt->execute();
     $stmt->close();
 }
-function insertUserPDO($email,$password,$db): void
+function insertUserPDO(string $email,string $password,PDO $db): void
 {
     try
     {
@@ -24,7 +24,15 @@ function insertUserPDO($email,$password,$db): void
         echo 'ERROR '.$e->getMessage();
     }
 }
-function loginUserMySQLI($email, $password, $connect):bool
+function insertUserMySQLIObjectOriented(\dto\User $user, mysqli $conn): void
+{
+    insertUserMySQLI($user->getEmail(), $user->getPassword(),$conn);
+}
+function insertUserPDOObjectOriented(\dto\User $user, PDO $db): void
+{
+    insertUserPDO($user->getEmail(), $user->getPassword(),$db);
+}
+function loginUserMySQLI(string $email, string $password, mysqli $connect):bool
 {
     $stmt = $connect->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->bind_param("s",$email);
@@ -39,7 +47,11 @@ function loginUserMySQLI($email, $password, $connect):bool
     }
     return false;
 }
-function loginUserPDO($email, $password, $db):bool
+function loginUserMySQLIObjectOriented(\dto\User $user, mysqli $connect):bool
+{
+    return loginUserMySQLI($user->getEmail(),$user->getPassword(),$connect);
+}
+function loginUserPDO(string $email, string $password, PDO $db):bool
 {
     $stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
     $stmt->execute([$email]);
@@ -52,7 +64,11 @@ function loginUserPDO($email, $password, $db):bool
     }
     return false;
 }
-function getHashedPasswordFromUserEmailMySQLI($email, $connect):string
+function loginUserPDOObjectOriented(\dto\User $user, PDO $db):bool
+{
+    return loginUserPDO($user->getEmail(), $user->getPassword(), $db);
+}
+function getHashedPasswordFromUserEmailMySQLI(string $email, mysqli $connect):string
 {
     $stmt = $connect->prepare("SELECT password from users WHERE email = ?");
     $stmt->bind_param("s",$email);
@@ -61,7 +77,11 @@ function getHashedPasswordFromUserEmailMySQLI($email, $connect):string
     $row = mysqli_fetch_assoc($result);
     return $row['password'];
 }
-function getHashedPasswordFromUserEmailPDO($email, $db): ?string
+function getHashedPasswordFromUserEmailMySQLIObjectOriented(\dto\User $user, mysqli $connect):string
+{
+    return getHashedPasswordFromUserEmailMySQLI($user->getEmail(),$connect);
+}
+function getHashedPasswordFromUserEmailPDO(string $email, PDO $db): ?string
 {
     $stmt = $db->prepare("SELECT password from users WHERE email = ?");
     $stmt->execute([$email]);
@@ -70,13 +90,17 @@ function getHashedPasswordFromUserEmailPDO($email, $db): ?string
         return $result['password'];
     return null;
 }
-function getUsersMySQLI($connect)
+function getHashedPasswordFromUserEmailPDOObjectOriented(\dto\User $user, PDO $db): ?string
+{
+    return getHashedPasswordFromUserEmailPDO($user->getEmail(), $db);
+}
+function getUsersMySQLI(mysqli $connect): false|mysqli_result
 {
     $stmt = $connect->prepare("SELECT * FROM users");
     $stmt->execute();
     return $stmt->get_result();
 }
-function getUsersPDO($db)
+function getUsersPDO(PDO $db): false|array
 {
     $stmt = $db->prepare("SELECT * FROM users");
     $stmt->execute();
