@@ -21,6 +21,7 @@ session_destroy(); // For remove the session.
 
 require '../config/connect.php';
 require '../src/functions.php';
+require '../includes/sessions.php';
 ?>
 <!doctype html>
 <html lang="en">
@@ -70,19 +71,24 @@ require '../src/functions.php';
     // We use it in this case for made a postback form when the called method is the post.
     if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
-        // Variables: Every variables must start with the $ symbol.
+        // Variables: Every variable must start with the $ symbol.
         // For declare and initialize a variable we use this syntax: $<name> = value;
         // Data types: PHP is a dynamic and lowed typed language.
         // We have the int,float,bool,string,array,object,null,resource and void types.
         // $_POST: Array that contains the values of the data passed within a form that has the post method.
         // For obtain access to the data we use the name that is equal to the input name field.
 
+        /*FOR mysqli*/
+        //$email = mysqli_real_escape_string($_POST['email']);
+        //$password = mysqli_real_escape_string(['password']);
+        /*FOR PDO*/
         $email = $_POST['email'];
         $password = $_POST['password'];
 
         if (/*loginUserMySQLI($email,$password,$connect)*/loginUserPDO($email,$password,$db))
         {
-            echo 'Login OK!';
+            login($email,$password);
+            header('location:php/dashboard.php');
         }
 
     }

@@ -70,3 +70,15 @@ function getHashedPasswordFromUserEmailPDO($email, $db): ?string
         return $result['password'];
     return null;
 }
+function getUsersMySQLI($connect)
+{
+    $stmt = $connect->prepare("SELECT * FROM users");
+    $stmt->execute();
+    return $stmt->get_result();
+}
+function getUsersPDO($db)
+{
+    $stmt = $db->prepare("SELECT * FROM users");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
